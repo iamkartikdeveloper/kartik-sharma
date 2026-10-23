@@ -116,7 +116,7 @@ export function Navbar() {
 
           {/* YouTube Channel Button */}
           <a
-            href="https://youtube.com/@kartikdev"
+            href="https://www.youtube.com/@kartik_sharma546"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-600 text-xs font-semibold transition-all"
@@ -154,13 +154,13 @@ export function Navbar() {
           )}
 
           {/* Admin Portal Shortcut */}
-          <Link
+          {/* <Link
             href="/admin"
             className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-slate-100 border border-slate-200 transition-colors"
             title="Admin Dashboard"
           >
             <Shield className="w-4 h-4" />
-          </Link>
+          </Link> */}
         </div>
 
         {/* Mobile Hamburger Button */}

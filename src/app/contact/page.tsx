@@ -106,7 +106,7 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
                 label="Full Name *"
-                placeholder="e.g. Alex Johnson"
+                placeholder="e.g. Kartik Sharma"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -114,7 +114,7 @@ export default function ContactPage() {
               <Input
                 label="Email Address *"
                 type="email"
-                placeholder="alex@example.com"
+                placeholder="kartik.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -182,10 +182,10 @@ export default function ContactPage() {
               <div>
                 <span className="text-slate-500 block mb-1">Direct Inquiries:</span>
                 <a
-                  href="mailto:contact@kartikdev.com"
+                  href="mailto:kartiksharma20081186@gmail.com"
                   className="text-slate-900 hover:text-indigo-600 font-semibold transition-colors"
                 >
-                  contact@kartikdev.com
+                  kartiksharma20081186@gmail.com
                 </a>
               </div>
               <div>
@@ -200,7 +200,7 @@ export default function ContactPage() {
             <h3 className="text-sm font-bold text-slate-900">Connect Across Platforms</h3>
             <div className="grid grid-cols-2 gap-3 text-xs">
               <a
-                href="https://youtube.com/@kartikdev"
+                href="https://www.youtube.com/@kartik_sharma546"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold transition-colors"
@@ -209,7 +209,7 @@ export default function ContactPage() {
                 <span>YouTube</span>
               </a>
               <a
-                href="https://github.com/kartikdev"
+                href="https://github.com/iamkartikdeveloper"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold transition-colors"
@@ -218,7 +218,7 @@ export default function ContactPage() {
                 <span>GitHub</span>
               </a>
               <a
-                href="https://linkedin.com/in/kartikdev"
+                href="https://www.linkedin.com/in/kartik-sharma-softwaredeveloper"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold transition-colors"
@@ -227,7 +227,7 @@ export default function ContactPage() {
                 <span>LinkedIn</span>
               </a>
               <a
-                href="https://twitter.com/kartikdev"
+                href="https://x.com/KARTIKS9821537"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-semibold transition-colors"

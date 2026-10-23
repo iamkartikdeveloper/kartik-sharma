@@ -81,7 +81,7 @@ export function Footer() {
             </p>
             <div className="flex items-center gap-3 pt-2">
               <a
-                href="https://youtube.com/@kartikdev"
+                href="https://www.youtube.com/@kartik_sharma546"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-red-600 hover:border-red-300 hover:bg-red-50 transition-colors shadow-2xs"
@@ -90,7 +90,7 @@ export function Footer() {
                 <YouTubeIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://github.com/kartikdev"
+                href="https://github.com/iamkartikdeveloper"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 hover:bg-slate-100 transition-colors shadow-2xs"
@@ -99,7 +99,7 @@ export function Footer() {
                 <GitHubIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://linkedin.com/in/kartikdev"
+                href="www.linkedin.com/in/kartik-sharma-softwaredeveloper"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-sky-600 hover:border-sky-300 hover:bg-sky-50 transition-colors shadow-2xs"
@@ -108,7 +108,7 @@ export function Footer() {
                 <LinkedInIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://twitter.com/kartikdev"
+                href="https://x.com/KARTIKS9821537"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-sky-600 hover:border-sky-300 hover:bg-sky-50 transition-colors shadow-2xs"
@@ -117,7 +117,7 @@ export function Footer() {
                 <TwitterIcon className="w-4 h-4" />
               </a>
               <a
-                href="mailto:contact@kartikdev.com"
+                href="mailto:[kartiksharma20081186@gmail.com]"
                 className="p-2 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:text-indigo-600 hover:border-indigo-300 hover:bg-indigo-50 transition-colors shadow-2xs"
                 title="Email Me"
               >
@@ -238,14 +238,6 @@ export function Footer() {
         {/* Bottom copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© 2026 Kartik Sharma. All rights reserved.</p>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1 text-slate-600">
-              Built with Next.js, TypeScript &amp; Supabase
-            </span>
-            <Link href="/admin" className="text-slate-500 hover:text-indigo-600 transition-colors font-medium">
-              Admin Portal
-            </Link>
-          </div>
         </div>
       </div>
     </footer>

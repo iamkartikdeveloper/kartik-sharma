@@ -102,16 +102,16 @@ export default async function AboutPage() {
           {/* Social Profiles */}
           <div className="flex flex-wrap items-center gap-3 pt-2">
             <a
-              href="https://youtube.com/@kartikdev"
+              href="https://www.youtube.com/@kartik_sharma546"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-50 hover:bg-red-100 border border-red-200 text-red-700 text-xs font-semibold transition-colors"
             >
               <YouTubeIcon className="w-4 h-4" />
-              <span>125K+ on YouTube</span>
+              <span>YouTube</span>
             </a>
             <a
-              href="https://github.com/kartikdev"
+              href="https://github.com/iamkartikdeveloper"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-semibold transition-colors"
@@ -120,7 +120,7 @@ export default async function AboutPage() {
               <span>GitHub</span>
             </a>
             <a
-              href="https://linkedin.com/in/kartikdev"
+              href="https://www.linkedin.com/in/kartik-sharma-softwaredeveloper"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-xs font-semibold transition-colors"

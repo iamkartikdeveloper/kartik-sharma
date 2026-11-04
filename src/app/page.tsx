@@ -21,6 +21,7 @@ import {
   Compass,
 } from 'lucide-react';
 import { GitHubIcon } from '@/components/ui/Icons';
+import { cn } from '@/lib/utils/cn';
 
 import { MOCK_PROFILE, MOCK_CATEGORIES, MOCK_TUTORIALS, MOCK_PROJECTS } from '@/lib/mock-data';
 
@@ -89,6 +90,18 @@ export default async function HomePage() {
     'Explore production-grade Android, Flutter, and Full-Stack tutorials with complete source code, video walk-throughs, and step-by-step guides.';
   const announcement = siteSettings?.setting_value?.announcement_banner || '🚀 New Google AdMob & Android Kotlin Masterclass is live!';
 
+  const heroBgImage =
+    siteSettings?.setting_value?.hero_background_image !== undefined
+      ? siteSettings.setting_value.hero_background_image
+      : '/images/hero-cinematic.png';
+
+  const heroBgOpacity =
+    typeof siteSettings?.setting_value?.hero_background_opacity === 'number'
+      ? siteSettings.setting_value.hero_background_opacity
+      : 100;
+
+  const hasBgImage = Boolean(heroBgImage && heroBgImage.trim().length > 0);
+
   const skillsList = activeProfile.skills || [
     'Android Development',
     'Kotlin',
@@ -106,97 +119,190 @@ export default async function HomePage() {
 
   return (
     <div className="relative overflow-hidden">
-      {/* Background Ambient Glows */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-100/70 via-sky-100/50 to-transparent blur-3xl pointer-events-none rounded-full" />
-      <div className="absolute top-[600px] -right-20 w-[400px] h-[400px] bg-sky-100/50 blur-3xl pointer-events-none rounded-full" />
-
-      {/* 1. HERO SECTION */}
-      <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center text-center space-y-6">
-          {/* Announcement pill */}
-          {announcement && (
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-xs font-semibold shadow-2xs hover:bg-indigo-100 transition-all">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-              <span>{announcement}</span>
-            </div>
-          )}
-
-          {/* Profile Photo / Avatar with Glowing Border */}
-          <div className="relative group my-2">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-sky-500 to-emerald-400 shadow-md group-hover:scale-105 transition-transform duration-300">
-              <img
-                src={
-                  activeProfile.avatar_url ||
-                  'http://cdn-icons-png.flaticon.com/512/9131/9131549.png'
-                }
-                alt={activeProfile.display_name || 'Kartik Sharma'}
-                className="w-full h-full rounded-full object-cover border-2 border-white"
-              />
-            </div>
-            <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white p-1 rounded-full border-2 border-white shadow-2xs" title="Available for projects">
-              <span className="block w-2.5 h-2.5 rounded-full bg-emerald-600" />
-            </div>
+      {/* 1. HERO SECTION (CONTAINED EXCLUSIVELY TO UPPER HERO AREA) */}
+      <div className={cn(
+        "relative w-full overflow-hidden transition-colors duration-500",
+        hasBgImage ? "bg-slate-950" : ""
+      )}>
+        {/* Background Layer */}
+        {hasBgImage ? (
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none select-none">
+            {/* Cinematic Background Image */}
+            <div
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-700 ease-out"
+              style={{
+                backgroundImage: `url('${heroBgImage}')`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                opacity: heroBgOpacity / 100,
+              }}
+              aria-hidden="true"
+            />
+            {/* Cinematic Dark Overlay and Vignette Gradient for maximum text readability */}
+            <div className="absolute inset-0 bg-slate-950/65 backdrop-brightness-[0.75]" aria-hidden="true" />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-slate-950/70" aria-hidden="true" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-transparent to-slate-950/90" aria-hidden="true" />
           </div>
-
-          {/* Hero Titles */}
-          <div className="max-w-3xl space-y-3">
-            <p className="text-xs sm:text-sm font-mono uppercase tracking-widest text-indigo-600 font-bold">
-              Hello, I am {activeProfile.display_name || 'Kartik Sharma'}
-            </p>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
-              {heroHeading}
-            </h1>
-            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed pt-2">
-              {heroSubheading}
-            </p>
+        ) : (
+          <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+            {/* Background Ambient Glows for clean light theme */}
+            <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-indigo-100/70 via-sky-100/50 to-transparent blur-3xl pointer-events-none rounded-full" />
+            <div className="absolute top-[600px] -right-20 w-[400px] h-[400px] bg-sky-100/50 blur-3xl pointer-events-none rounded-full" />
           </div>
+        )}
 
-          {/* CTA Buttons */}
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
-            <Link href="/tutorials">
-              <Button size="lg" variant="primary" rightIcon={<ArrowRight className="w-4 h-4" />}>
-                Browse Tutorials
-              </Button>
-            </Link>
-            <Link href="/projects">
-              <Button size="lg" variant="secondary" leftIcon={<FolderGit2 className="w-4 h-4" />}>
-                View Projects
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline" leftIcon={<Mail className="w-4 h-4" />}>
-                Contact Me
-              </Button>
-            </Link>
-          </div>
-
-          {/* Social Proof Stats */}
-          <div className="pt-10 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-12 border-t border-slate-200 w-full max-w-4xl mt-8">
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-mono">
-                {siteSettings?.setting_value?.youtube_subscribers || '125K+'}
+        <section className="relative z-10 pt-20 pb-16 md:pt-28 md:pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center text-center space-y-6">
+            {/* Announcement pill */}
+            {announcement && (
+              <div className={cn(
+                "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200",
+                hasBgImage
+                  ? "bg-slate-900/80 backdrop-blur-md border border-slate-700/80 text-indigo-300 shadow-md hover:bg-slate-800/80"
+                  : "bg-indigo-50 border border-indigo-200 text-indigo-700 shadow-2xs hover:bg-indigo-100"
+              )}>
+                <Sparkles className={cn("w-3.5 h-3.5", hasBgImage ? "text-indigo-400" : "text-indigo-600")} />
+                <span>{announcement}</span>
               </div>
-              <div className="text-xs text-slate-500 font-medium mt-1">YouTube Subscribers</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-indigo-600 font-mono">
-                {siteSettings?.setting_value?.total_views || '4.8M+'}
+            )}
+
+            {/* Profile Photo / Avatar with Glowing Border */}
+            <div className="relative group my-2">
+              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full p-1 bg-gradient-to-tr from-indigo-500 via-sky-500 to-emerald-400 shadow-md group-hover:scale-105 transition-transform duration-300">
+                <img
+                  src={
+                    activeProfile.avatar_url ||
+                    'http://cdn-icons-png.flaticon.com/512/9131/9131549.png'
+                  }
+                  alt={activeProfile.display_name || 'Kartik Sharma'}
+                  className="w-full h-full rounded-full object-cover border-2 border-white"
+                />
               </div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Video Views</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-mono">
-                {tutorials?.length ? `${tutorials.length}+` : '20+'}
+              <div className="absolute -bottom-1 -right-1 bg-emerald-500 text-white p-1 rounded-full border-2 border-white shadow-2xs" title="Available for projects">
+                <span className="block w-2.5 h-2.5 rounded-full bg-emerald-600" />
               </div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Free In-Depth Guides</div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold text-emerald-600 font-mono">100%</div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Free Source Code</div>
+
+            {/* Hero Titles */}
+            <div className="max-w-3xl space-y-3">
+              <p className={cn(
+                "text-xs sm:text-sm font-mono uppercase tracking-widest font-bold",
+                hasBgImage ? "text-indigo-400 drop-shadow-sm" : "text-indigo-600"
+              )}>
+                Hello, I am {activeProfile.display_name || 'Kartik Sharma'}
+              </p>
+              <h1 className={cn(
+                "text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight",
+                hasBgImage ? "text-white drop-shadow-md" : "text-slate-900"
+              )}>
+                {heroHeading}
+              </h1>
+              <p className={cn(
+                "text-base sm:text-lg max-w-2xl mx-auto leading-relaxed pt-2",
+                hasBgImage ? "text-slate-200 drop-shadow-sm" : "text-slate-600"
+              )}>
+                {heroSubheading}
+              </p>
+            </div>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-4">
+              <Link href="/tutorials">
+                <Button size="lg" variant="primary" rightIcon={<ArrowRight className="w-4 h-4" />}>
+                  Browse Tutorials
+                </Button>
+              </Link>
+              <Link href="/projects">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  leftIcon={<FolderGit2 className="w-4 h-4" />}
+                  className={cn(
+                    hasBgImage && "bg-white/95 hover:bg-white text-slate-900 shadow-md border-white/80"
+                  )}
+                >
+                  View Projects
+                </Button>
+              </Link>
+              <Link href="/contact">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  leftIcon={<Mail className="w-4 h-4" />}
+                  className={cn(
+                    hasBgImage && "bg-slate-900/70 hover:bg-slate-900/90 text-white border-slate-700/80 backdrop-blur-sm shadow-md"
+                  )}
+                >
+                  Contact Me
+                </Button>
+              </Link>
+            </div>
+
+            {/* Social Proof Stats */}
+            <div className={cn(
+              "pt-10 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-12 w-full max-w-4xl mt-8 transition-colors duration-300",
+              hasBgImage ? "border-t border-slate-800" : "border-t border-slate-200"
+            )}>
+              <div className="text-center">
+                <div className={cn(
+                  "text-2xl sm:text-3xl font-extrabold font-mono",
+                  hasBgImage ? "text-white drop-shadow-sm" : "text-slate-900"
+                )}>
+                  {siteSettings?.setting_value?.youtube_subscribers || '125K+'}
+                </div>
+                <div className={cn(
+                  "text-xs font-medium mt-1",
+                  hasBgImage ? "text-slate-300" : "text-slate-500"
+                )}>
+                  YouTube Subscribers
+                </div>
+              </div>
+              <div className="text-center">
+                <div className={cn(
+                  "text-2xl sm:text-3xl font-extrabold font-mono",
+                  hasBgImage ? "text-indigo-400 drop-shadow-sm" : "text-indigo-600"
+                )}>
+                  {siteSettings?.setting_value?.total_views || '4.8M+'}
+                </div>
+                <div className={cn(
+                  "text-xs font-medium mt-1",
+                  hasBgImage ? "text-slate-300" : "text-slate-500"
+                )}>
+                  Video Views
+                </div>
+              </div>
+              <div className="text-center">
+                <div className={cn(
+                  "text-2xl sm:text-3xl font-extrabold font-mono",
+                  hasBgImage ? "text-white drop-shadow-sm" : "text-slate-900"
+                )}>
+                  {tutorials?.length ? `${tutorials.length}+` : '20+'}
+                </div>
+                <div className={cn(
+                  "text-xs font-medium mt-1",
+                  hasBgImage ? "text-slate-300" : "text-slate-500"
+                )}>
+                  Free In-Depth Guides
+                </div>
+              </div>
+              <div className="text-center">
+                <div className={cn(
+                  "text-2xl sm:text-3xl font-extrabold font-mono",
+                  hasBgImage ? "text-emerald-400 drop-shadow-sm" : "text-emerald-600"
+                )}>
+                  100%
+                </div>
+                <div className={cn(
+                  "text-xs font-medium mt-1",
+                  hasBgImage ? "text-slate-300" : "text-slate-500"
+                )}>
+                  Free Source Code
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* 2. SKILLS & TECHNOLOGIES TICKER / GRID */}
       <section className="py-10 bg-white border-y border-slate-200">

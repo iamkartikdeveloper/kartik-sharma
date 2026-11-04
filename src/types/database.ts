@@ -176,6 +176,8 @@ export interface WebsiteSettings {
     youtube_subscribers?: string;
     total_views?: string;
     footer_text?: string;
+    hero_background_image?: string;
+    hero_background_opacity?: number;
     [key: string]: any;
   };
   updated_at: string;

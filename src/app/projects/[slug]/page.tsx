@@ -1,22 +1,10 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
 import { Metadata } from 'next';
 import { createServerClient } from '@/lib/supabase/server';
-import { Badge } from '@/components/ui/Badge';
-import { MarkdownRenderer } from '@/components/public/MarkdownRenderer';
-import {
-  ChevronRight,
-  ExternalLink,
-  FolderGit2,
-  Calendar,
-  Layers,
-  ArrowLeft,
-} from 'lucide-react';
-import { GitHubIcon } from '@/components/ui/Icons';
-import { formatDate } from '@/lib/utils/reading-time';
-
+import { ProjectDetailClient } from '@/components/public/ProjectDetailClient';
 import { MOCK_PROJECTS } from '@/lib/mock-data';
+import { Project, ProjectVersion } from '@/types/database';
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
@@ -30,9 +18,9 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   try {
     const { data } = await supabase
       .from('projects')
-      .select('title, description, thumbnail_url')
+      .select('title, description, short_description, icon_url, banner_url, thumbnail_url')
       .eq('slug', slug)
-      .single();
+      .maybeSingle();
     projectData = data;
   } catch {}
 
@@ -40,15 +28,24 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
     projectData = MOCK_PROJECTS.find((p) => p.slug === slug);
   }
 
-  if (!projectData) return { title: 'Project Not Found' };
+  if (!projectData) return { title: 'Application Not Found' };
+
+  const image =
+    projectData.banner_url ||
+    projectData.thumbnail_url ||
+    projectData.icon_url ||
+    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200';
 
   return {
-    title: `${projectData.title} | Projects | Kartik Sharma`,
-    description: projectData.description || '',
+    title: `${projectData.title} APK Download & Architecture | Kartik Sharma`,
+    description:
+      projectData.short_description ||
+      projectData.description ||
+      'Download verified application APK and inspect modern architecture.',
     openGraph: {
-      title: projectData.title,
-      description: projectData.description || '',
-      images: [projectData.thumbnail_url || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1200'],
+      title: `${projectData.title} APK Download`,
+      description: projectData.short_description || projectData.description || '',
+      images: [image],
     },
   };
 }
@@ -57,115 +54,52 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   const { slug } = await params;
   const supabase = createServerClient();
 
-  let project: any = null;
+  let project: Project | null = null;
+  let versions: ProjectVersion[] = [];
+
   try {
-    const { data } = await supabase
+    const { data: projData, error: projErr } = await supabase
       .from('projects')
       .select('*')
       .eq('slug', slug)
-      .single();
-    project = data;
+      .maybeSingle();
+
+    if (!projErr && projData) {
+      project = projData as Project;
+
+      // Fetch published versions from database
+      try {
+        const { data: verData, error: verErr } = await supabase
+          .from('project_versions')
+          .select('*')
+          .eq('project_id', project.id)
+          .eq('status', 'published')
+          .order('display_order', { ascending: true })
+          .order('created_at', { ascending: false });
+
+        if (!verErr && verData && verData.length > 0) {
+          versions = verData as ProjectVersion[];
+        }
+      } catch (e) {
+        console.warn('Could not fetch project versions from DB:', e);
+      }
+    }
   } catch {}
 
   if (!project) {
-    project = MOCK_PROJECTS.find((p) => p.slug === slug);
+    const mockMatch = MOCK_PROJECTS.find((p) => p.slug === slug);
+    if (mockMatch) {
+      project = mockMatch;
+      versions = mockMatch.versions || [];
+    }
   }
 
   if (!project) notFound();
 
-  return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 space-y-10">
-      {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-xs text-slate-500">
-        <Link href="/" className="hover:text-indigo-600 transition-colors">
-          Home
-        </Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <Link href="/projects" className="hover:text-indigo-600 transition-colors">
-          Projects
-        </Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-slate-900 font-semibold truncate max-w-xs">{project.title}</span>
-      </nav>
+  // If versions are still empty, check if mock data has fallback versions
+  if (versions.length === 0 && (project as any).versions?.length > 0) {
+    versions = (project as any).versions;
+  }
 
-      {/* Header */}
-      <div className="space-y-4">
-        <div className="flex flex-wrap items-center gap-2">
-          {project.is_featured && (
-            <Badge variant="gradient" size="md">
-              Featured Case Study
-            </Badge>
-          )}
-          <span className="text-xs text-slate-500 flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Updated {formatDate(project.updated_at)}</span>
-          </span>
-        </div>
-
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight">
-          {project.title}
-        </h1>
-
-        <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-3xl">
-          {project.description}
-        </p>
-
-        {/* Tech Stack tags */}
-        <div className="flex flex-wrap gap-2 pt-2">
-          {project.technologies?.map((tech: string, i: number) => (
-            <Badge key={i} variant="secondary" size="md">
-              {tech}
-            </Badge>
-          ))}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center gap-4 pt-4 border-b border-slate-200 pb-8">
-          {project.demo_url && (
-            <a
-              href={project.demo_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold shadow-xs transition-colors"
-            >
-              <span>Visit Live Demo</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          )}
-          {project.github_url && (
-            <a
-              href={project.github_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800 text-sm font-semibold transition-colors"
-            >
-              <GitHubIcon className="w-4 h-4" />
-              <span>Browse Source Code</span>
-            </a>
-          )}
-        </div>
-      </div>
-
-      {/* Hero Showcase Image */}
-      {project.thumbnail_url && (
-        <div className="rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-100">
-          <img
-            src={project.thumbnail_url}
-            alt={project.title}
-            className="w-full h-auto object-cover max-h-[500px]"
-          />
-        </div>
-      )}
-
-      {/* Case Study Detailed Content */}
-      {project.content && (
-        <div className="p-8 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-          <h2 className="text-xl font-extrabold text-slate-900 mb-6 border-b border-slate-200 pb-3">
-            Architecture &amp; Implementation Details
-          </h2>
-          <MarkdownRenderer content={project.content} />
-        </div>
-      )}
-    </div>
-  );
+  return <ProjectDetailClient project={project} versions={versions} />;
 }

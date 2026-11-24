@@ -94,8 +94,8 @@ export default function AdminSettingsPage() {
           setProfileId(session.user.id);
           setDisplayName(
             session.user.user_metadata?.full_name ||
-              session.user.email?.split('@')[0] ||
-              'Kartik Sharma'
+            session.user.email?.split('@')[0] ||
+            'Kartik Sharma'
           );
           setEmail(session.user.email || '');
         }
@@ -700,6 +700,7 @@ export default function AdminSettingsPage() {
                 >
                   Save Visibility Setting
                 </Button>
+                
               </div>
             </div>
           </div>

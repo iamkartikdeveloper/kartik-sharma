@@ -108,20 +108,62 @@ export interface TutorialResource {
   created_at: string;
 }
 
+export interface ProjectVersion {
+  id: string;
+  project_id: string;
+  version_name: string;
+  version_number: string;
+  version_type: 'MOD' | 'Original' | 'Beta' | 'Older' | string;
+  file_size: string;
+  architecture: 'Universal' | 'ARM64' | 'ARM' | 'x86' | 'Other' | string;
+  root_requirement: 'Non-Root' | 'Root' | 'Both' | 'Not Applicable' | string;
+  download_url: string;
+  changelog?: string | null;
+  release_date?: string | null;
+  is_latest: boolean;
+  status: 'draft' | 'published';
+  display_order: number;
+  created_at?: string;
+}
+
+export interface ProjectImage {
+  id: string;
+  project_id: string;
+  image_url: string;
+  image_type?: string;
+  caption?: string | null;
+  display_order: number;
+  created_at?: string;
+}
+
 export interface Project {
   id: string;
   title: string;
   slug: string;
   description: string | null;
+  short_description?: string | null;
   content: string | null;
+  publisher?: string | null;
+  category?: string | null;
+  platform?: string | null;
+  app_size?: string | null;
+  latest_version?: string | null;
+  mod_info?: string | null;
+  whats_new?: string | null;
+  icon_url?: string | null;
+  banner_url?: string | null;
   thumbnail_url: string | null;
+  screenshots?: string[] | null;
   technologies: string[];
   github_url: string | null;
   demo_url: string | null;
+  original_url?: string | null;
   is_featured: boolean;
   status: 'draft' | 'published' | 'archived';
+  display_order?: number;
   created_at: string;
   updated_at: string;
+  versions?: ProjectVersion[];
 }
 
 export interface ContactMessage {
